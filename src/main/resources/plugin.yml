@@ -1,0 +1,9 @@
+name: Dojo
+version: '${project.version}'
+main: me.suff.dojo.Dojo
+authors:
+  - Emmy
+  - Suff
+  - curxxed
+description: Server Management Plugin
+website: discord.gg/prbw

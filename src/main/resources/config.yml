@@ -1,0 +1,92 @@
+storage-type: "FLAT_FILE" #MONGO or FLAT_FILE
+# ------ Mongo Configuration ------
+mongo:
+  uri: mongodb://uutgwmxp3uwiy2zarxju:4mp9HShpNllyqHFSwRb@bceygew3ehv43mnlncgj-mongodb.services.clever-cloud.com:2273/bceygew3ehv43mnlncgj
+  database: bceygew3ehv43mnlncgj
+# ------ Server properties ------
+server:
+  name: Practice
+  region: Europe
+# ------ Messaging format ------
+conversation:
+  enabled: true # /message and /reply won't register if set to false
+  format:
+    received: "&7(From {color}{sender}&7) {message}"
+    sent: "&7(To {color}{sender}&7) {message}"
+# ------ Socials ------
+socials:
+  store: "https://store.ranked.dojo"
+  website: "https://ranked.dojo"
+  discord: "https://discord.gg/prbw"
+  youtube: ""
+  twitter: ""
+  tiktok: ""
+  github: ""
+  teamspeak: ""
+  facebook: ""
+  instagram: ""
+# ------ Default reasons ------
+grant:
+  default-reason: "No reason specified."
+# ------ spawn location of the server ------
+spawn:
+  join-location:
+# ------ configure player join actions ------
+on-join:
+  tp-to-spawn: false #Teleports player to spawn on join
+  reset-player: false #Resets player's inventory, health, hunger, and effects on join
+  welcome-message:
+    enabled: true
+    # Available placeholders:
+    # {player}, {rank}, {color}, {online}, {max-online}, {store}, {discord}, {website}, {teamspeak},
+    # {twitter}, {instagram}, {youtube}, {tiktok}, {facebook}, {github}, {server}, {region}.
+    context:
+      - "&7&m--------------------------------------"
+      - "&fWelcome to &6Artex Network, &f{color}{player}&f!"
+      - " "
+      - " &aYour current Rank is &e{rank}&a."
+      - "&7&m--------------------------------------"
+# ------ Broadcast configuration ------
+broadcast:
+  enabled: false
+  send-every: 60
+  list:
+    message-1:
+      - " "
+      - "&7[&4&lArtex&7] &4&lDiscord"
+      - " &fJoin our discord to get informed"
+      - " &fabout news & updates!"
+      - " &c{discord}"
+      - " "
+    message-2:
+      - " "
+      - "&7[&4&lArtex&7] &4&lSocial Media"
+      - " &fWe now upload shorts on YouTube."
+      - " &fCheck them out at"
+      - " &c{youtube}&f."
+      - " &fDon't forget to like & subscribe!"
+      - " "
+    message-3:
+      - " "
+      - "&7[&4&lArtex&7] &4&lStore"
+      - " &fDon't forget to check our store"
+      - " &ffor exclusive offers at"
+      - " &c{store}&f."
+      - " "
+    message-4:
+      - " "
+      - "&7[&4&lArtex&7] &4&lStore"
+      - " &fNew Tags available at"
+      - " &c{store}&f."
+      - " &fUse code &cTAGS50 &fto get 50% off!"
+      - " "
+    message-5:
+      - " "
+      - "&7[&4&lArtex&7] &4&lStore"
+      - " &fWe're currently on a"
+      - " &f50% sale on all ranks!"
+      - " &fYour one-time opportunity"
+      - " &fto get your rank!"
+      - " &fVisit our store at"
+      - " &c{store}&f."
+      - " "
