@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 
 public class ListCommand extends BaseCommand {
-    @Command(name = "list", aliases = "who", permission = "dojo.list", inGameOnly = false)
+    @Command(name = "list", aliases = "who", inGameOnly = false)
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

@@ -11,6 +11,7 @@ import ranked.dojo.command.impl.admin.gamemode.*;
 import ranked.dojo.command.impl.admin.server.*;
 import ranked.dojo.command.impl.admin.troll.*;
 import ranked.dojo.command.impl.donator.*;
+import ranked.dojo.command.impl.staff.BanCommand;
 import ranked.dojo.command.impl.staff.KickCommand;
 import ranked.dojo.command.impl.user.*;
 import ranked.dojo.conversation.command.*;
@@ -32,6 +33,8 @@ public class CommandUtility {
         new MuteChatCommand();
         new UnMuteChatCommand();
         new KickCommand();
+        new WeatherCommand();
+        new BanCommand();
         if (Dojo.getInstance().getConfig().getBoolean("conversation.enabled")) {
             new MessageCommand();
             new ReplyCommand();
@@ -62,6 +65,7 @@ public class CommandUtility {
         new RemoveRankCommand();
         new RankCommand();
         new MediaBroadcastCommand();
+        new PingCommand();
         new TagCommand();
     }
 }

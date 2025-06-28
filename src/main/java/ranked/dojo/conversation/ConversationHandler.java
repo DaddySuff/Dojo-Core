@@ -65,13 +65,16 @@ public class ConversationHandler {
         Rank senderRank = Dojo.getInstance().getProfileRepository().getProfile(senderPlayer.getUniqueId()).getHighestRankBasedOnGrant();
         Rank targetRank = Dojo.getInstance().getProfileRepository().getProfile(targetPlayer.getUniqueId()).getHighestRankBasedOnGrant();
 
+        String senderColor = senderRank == null ? "&a" : senderRank.getColor().toString();
+        String targetColor = targetRank == null ? "&a" : targetRank.getColor().toString();
+
         targetPlayer.sendMessage(CC.translate(this.receivedFormat
-                .replace("{sender}", senderRank == null ? "&a" + senderPlayer.getName() : senderRank.getColor() + senderPlayer.getName())
+                .replace("{sender}", CC.translate(senderColor + senderPlayer.getName()))
                 .replace("{message}", message)));
         targetPlayer.playSound(targetPlayer.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
 
         senderPlayer.sendMessage(CC.translate(this.sentFormat
-                .replace("{sender}", targetRank == null ? "&a" + targetPlayer.getName() : targetRank.getColor() + targetPlayer.getName())
+                .replace("{sender}", CC.translate(targetColor + targetPlayer.getName()))
                 .replace("{message}", message)));
         senderPlayer.playSound(senderPlayer.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
     }

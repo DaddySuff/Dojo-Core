@@ -1,6 +1,7 @@
 package ranked.dojo;
 
 import lombok.Getter;
+import org.bukkit.event.Listener;
 import ranked.dojo.api.menu.listener.MenuListener;
 import ranked.dojo.broadcast.BroadcastTask;
 import ranked.dojo.chat.ChatService;
@@ -16,13 +17,17 @@ import ranked.dojo.namecolor.menu.NameColorMenu;
 import ranked.dojo.namecolor.NameColorListener;
 import ranked.dojo.namecolor.RankHookListener;
 import ranked.dojo.namecolor.integration.RankIntegration;
+import ranked.dojo.punishment.PunishmentHandler;
 import ranked.dojo.rank.RankService;
 import ranked.dojo.spawn.SpawnHandler;
 import ranked.dojo.tag.TagService;
 import ranked.dojo.util.CC;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
+import org.bukkit.World;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import ranked.dojo.util.WeatherListener;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +51,19 @@ public class Dojo extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        // Disable weather in all worlds on startup
+        for (World world : Bukkit.getWorlds()) {
+            world.setStorm(false);
+            world.setThundering(false);
+            world.setWeatherDuration(0);
+            world.setThunderDuration(0);
+        }
+
+        // Register weather listener to prevent weather changes
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new WeatherListener(), this);
+        pm.registerEvents(new PunishmentHandler(), this);
 
         this.registerChannels();
         this.registerCommands();

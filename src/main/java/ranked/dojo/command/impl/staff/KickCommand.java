@@ -23,6 +23,7 @@ public class KickCommand extends BaseCommand {
         if (args.length() < 2) {
             args.getSender().sendMessage(CC.translate("&cUsage: /kick <player> <reason> [-s]"));
             return;
+            //aaaa
         }
 
         String targetName = args.getArgs(0);
@@ -60,7 +61,7 @@ public class KickCommand extends BaseCommand {
         Profile targetProfile = Dojo.getInstance().getProfileRepository().getProfile(target.getUniqueId());
         Rank targetRank = targetProfile != null ? targetProfile.getHighestRankBasedOnGrant() : null;
         String targetColor = (targetRank != null && targetRank.getColor() != null) ? targetRank.getColor().toString() : "";
-        String broadcastMsg = CC.translate("&a" + targetColor + target.getName() + "&r has been kicked by " + kickerColor + kickerName + ". Reason: &r" + reason);
+        String broadcastMsg = CC.translate("&a" + targetColor + target.getName() + "&a has been kicked by " + kickerColor + kickerName + "&a. Reason: &r" + reason);
         if (silent) {
             ProfileRepository profileRepo = Dojo.getInstance().getProfileRepository();
             for (Player p : target.getServer().getOnlinePlayers()) {
@@ -68,7 +69,7 @@ public class KickCommand extends BaseCommand {
                 Rank rank = profile != null ? profile.getHighestRankBasedOnGrant() : null;
                 boolean isStaffCategory = rank != null && rank.getRankCategory() == RankCategory.STAFF;
                 if (isStaffCategory || p.isOp()) {
-                    p.sendMessage(CC.translate("&7&l(Silent) &r" + broadcastMsg));
+                    p.sendMessage(CC.translate("&7(Silent) &r" + broadcastMsg));
                 }
             }
         } else {

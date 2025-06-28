@@ -5,6 +5,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
+/**
+ * @author curxxed
+ * @date 6/28/2025
+ * @project Dojo
+ */
 public class BukkitUtils {
     private static final String SERVER_VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 
@@ -44,3 +49,4 @@ public class BukkitUtils {
         Bukkit.shutdown();
     }
 }
+
