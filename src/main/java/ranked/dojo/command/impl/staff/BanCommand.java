@@ -53,8 +53,7 @@ public class BanCommand extends BaseCommand {
             commandArgs.getSender().sendMessage(CC.translate(CC.PREFIX + "&cInvalid duration. Use m/h/d/perm."));
             return;
         }
-        // Handle -s (silent) flag
-        // Create and register the punishment
+        
         Punishment punishment = new Punishment();
         punishment.setPunishmentType(EnumPunishmentType.BAN);
         punishment.setPunisher(commandArgs.getSender().getName());
@@ -64,14 +63,13 @@ public class BanCommand extends BaseCommand {
         punishment.setAddedAt(System.currentTimeMillis());
         punishment.setExpiration(durationMillis == -1L ? -1L : System.currentTimeMillis() + durationMillis);
         punishment.setActive(true);
-        // Check if target has STAFF rank category
         Profile targetProfile = Dojo.getInstance().getProfileRepository().getProfile(target.getUniqueId());
         boolean isStaff = targetProfile.getHighestRankBasedOnGrant().getRankCategory() == RankCategory.STAFF;
         if (isStaff && !isConfirm) {
             commandArgs.getSender().sendMessage(CC.translate(CC.PREFIX + "&cYou are about to ban a STAFF member! To confirm, use: &e/ban confirm " + targetName + " " + durationArg + (reason.equals("No reason specified") ? "" : " " + reason) + (silent ? " -s" : "")));
             return;
         }
-        // If /ban confirm ... is used, shift args so targetName/durationArg/reason are correct
+        //TODO: Only make /ban confirm valid if you already tried banning a Staff Member
         if (isConfirm) {
             if (commandArgs.getArgs().length < 3) {
                 commandArgs.getSender().sendMessage(CC.translate(CC.PREFIX + "&cUsage: /ban confirm <player> <duration> [reason] [-s]"));
@@ -79,13 +77,11 @@ public class BanCommand extends BaseCommand {
             }
             targetName = commandArgs.getArgs()[1];
             durationArg = commandArgs.getArgs()[2];
-            // Re-fetch the target after shifting args
             target = Bukkit.getPlayerExact(targetName);
             if (target == null) {
                 commandArgs.getSender().sendMessage(CC.translate(CC.PREFIX + "&cPlayer not found."));
                 return;
             }
-            // Recalculate silent and reason after shifting
             argsArray = commandArgs.getArgs();
             silent = argsArray[argsArray.length - 1].equalsIgnoreCase("-s");
             if (silent) {
@@ -102,7 +98,6 @@ public class BanCommand extends BaseCommand {
                 "\n&7If you believe this is a mistake, contact staff." +
                 "\n&8&m--------------------------------------\n";
         target.kickPlayer(CC.translate(banMsg));
-        // Get sender's name and color (like KickCommand)
         String senderName = commandArgs.getSender() instanceof Player ? ((Player) commandArgs.getSender()).getName() : "&fCONSOLE";
         String senderColor = "";
         if (commandArgs.getSender() instanceof Player) {
@@ -112,10 +107,8 @@ public class BanCommand extends BaseCommand {
                 senderColor = senderRank.getColor().toString();
             }
         }
-        // Get target's rank color for broadcast
         Rank targetRank = targetProfile != null ? targetProfile.getHighestRankBasedOnGrant() : null;
         String targetColor = (targetRank != null && targetRank.getColor() != null) ? targetRank.getColor().toString() : "";
-        // Broadcast ban message (like KickCommand)
         String banBroadcast = CC.translate((silent ? "&7(Silent) " : "") + targetColor + target.getName() + "&a has been banned by " + senderColor + senderName + "&a for: &r" + reason);
         if (silent) {
             for (Player p : target.getServer().getOnlinePlayers()) {
