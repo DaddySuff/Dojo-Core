@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import java.util.Arrays;
 
 public class BroadcastCommand extends BaseCommand {
-    @Command(name = "broadcast", permission = "dojo.command.broadcast", inGameOnly = false)
+    @Command(name = "broadcast", permission = "dojo.command.broadcast", inGameOnly = false, aliases = {"bc", "alert", "announce"})
     @Override
     public void onCommand(CommandArgs command) {
         CommandSender sender = command.getSender();

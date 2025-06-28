@@ -9,6 +9,7 @@ import ranked.dojo.namecolor.integration.RankIntegration;
 import ranked.dojo.profile.Profile;
 import ranked.dojo.rank.Rank;
 import ranked.dojo.rank.RankService;
+import ranked.dojo.rank.enums.RankCategory;
 import ranked.dojo.util.BukkitUtils;
 import ranked.dojo.util.CC;
 import org.bukkit.command.CommandSender;
@@ -37,6 +38,7 @@ public class RankCommand extends BaseCommand {
             sender.sendMessage(CC.translate(" &e/rank setprefix <name> <prefix> &7- &fSet the prefix of a rank."));
             sender.sendMessage(CC.translate(" &e/rank setsuffix <name> <suffix> &7- &fSet the suffix of a rank."));
             sender.sendMessage(CC.translate(" &e/rank setweight <name> <weight> &7- &fSet the weight of a rank."));
+            sender.sendMessage(CC.translate(" &e/rank setcategory <name> <enum> &7- &fSet the enum type of a rank (e.g. DEFAULT, STAFF, DONATOR, etc)."));
             sender.sendMessage(CC.translate(" &e/rank addpermission <name> <permission> &7- &fAdd a permission to a rank."));
             sender.sendMessage(CC.translate(" &e/rank help &7- &fShow detailed help for rank commands."));
             sender.sendMessage(CC.translate(""));
@@ -120,13 +122,13 @@ public class RankCommand extends BaseCommand {
                     return;
                 }
                 sender.sendMessage(CC.translate("&6Rank Info for &e" + infoRank.getName()));
+                sender.sendMessage(CC.translate("&7Category: &f" + (infoRank.getRankCategory() != null ? infoRank.getRankCategory().name() : "None")));
                 sender.sendMessage(CC.translate("&7Prefix: &f" + infoRank.getPrefix()));
                 sender.sendMessage(CC.translate("&7Suffix: &f" + infoRank.getSuffix()));
                 sender.sendMessage(CC.translate("&7Color: &f" + (infoRank.getColor() != null ? infoRank.getColor() + infoRank.getColor().name() : "None")));
                 sender.sendMessage(CC.translate("&7Bold: &f" + infoRank.isBold()));
                 sender.sendMessage(CC.translate("&7Italic: &f" + infoRank.isItalic()));
                 sender.sendMessage(CC.translate("&7Weight: &f" + infoRank.getWeight()));
-                sender.sendMessage(CC.translate("&7Default: &f" + infoRank.isDefaultRank()));
                 sender.sendMessage(CC.translate("&7Permissions: &f" + (infoRank.getPermissions() != null ? String.join(", ", infoRank.getPermissions()) : "None")));
                 break;
             case "setbold":
@@ -326,8 +328,34 @@ public class RankCommand extends BaseCommand {
                 sender.sendMessage(CC.translate(" &e/rank setprefix <name> <prefix> &7- &fSet the prefix of a rank."));
                 sender.sendMessage(CC.translate(" &e/rank setsuffix <name> <suffix> &7- &fSet the suffix of a rank."));
                 sender.sendMessage(CC.translate(" &e/rank setweight <name> <weight> &7- &fSet the weight of a rank."));
+                sender.sendMessage(CC.translate(" &e/rank setcategory <name> <enum> &7- &fSet the enum type of a rank (e.g. DEFAULT, STAFF, DONATOR, etc)."));
                 sender.sendMessage(CC.translate(" &e/rank addpermission <name> <permission> &7- &fAdd a permission to a rank."));
                 sender.sendMessage(CC.translate(" &e/rank help &7- &fShow detailed help for rank commands."));
+                break;
+            case "setcategory":
+                if (!sender.hasPermission("dojo.rank.setcategory")) {
+                    sender.sendMessage(CC.translate("&cNo permission."));
+                    return;
+                }
+                if (args.length != 3) {
+                    sender.sendMessage(CC.translate("&cUsage: /rank setcategory <name> <category>"));
+                    return;
+                }
+                rankService = Dojo.getInstance().getRankService();
+                Rank categoryRank = rankService.getRanks().stream().filter(r -> r.getName().equalsIgnoreCase(args[1])).findFirst().orElse(null);
+                if (categoryRank == null) {
+                    sender.sendMessage(CC.translate("&cRank not found."));
+                    return;
+                }
+                String categoryName = args[2].toUpperCase();
+                try {
+                    RankCategory category = RankCategory.valueOf(categoryName);
+                    categoryRank.setRankCategory(category);
+                    rankService.saveRanks();
+                    sender.sendMessage(CC.translate("&aRank category updated: &f" + categoryRank.getName() + " &7is now &e" + category.name()));
+                } catch (IllegalArgumentException e) {
+                    sender.sendMessage(CC.translate("&cInvalid category. Valid values: &f" + java.util.Arrays.toString(RankCategory.values())));
+                }
                 break;
             default:
                 sender.sendMessage(CC.translate("&cUnknown subcommand. Use /rank for help."));

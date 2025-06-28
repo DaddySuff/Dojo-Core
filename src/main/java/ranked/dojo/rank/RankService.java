@@ -9,6 +9,7 @@ import ranked.dojo.util.BukkitUtils;
 import org.bson.Document;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import ranked.dojo.rank.enums.RankCategory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,6 +69,12 @@ public class RankService {
                 rank.setItalic(this.ranksConfig.getBoolean("ranks." + rankName + ".italic"));
                 rank.setDefaultRank(this.ranksConfig.getBoolean("ranks." + rankName + ".defaultRank"));
                 rank.setPermissions(this.ranksConfig.getStringList("ranks." + rankName + ".permissions"));
+                String categoryString = this.ranksConfig.getString("ranks." + rankName + ".category");
+                if (categoryString != null) {
+                    rank.setRankCategory(RankCategory.valueOf(categoryString));
+                } else {
+                    rank.setRankCategory(RankCategory.DEFAULT);
+                }
                 this.ranks.add(rank);
             }
         } else {
@@ -100,6 +107,7 @@ public class RankService {
                 this.ranksConfig.set("ranks." + rank.getName() + ".italic", rank.isItalic());
                 this.ranksConfig.set("ranks." + rank.getName() + ".defaultRank", rank.isDefaultRank());
                 this.ranksConfig.set("ranks." + rank.getName() + ".permissions", rank.getPermissions());
+                this.ranksConfig.set("ranks." + rank.getName() + ".category", rank.getRankCategory() != null ? rank.getRankCategory().name() : RankCategory.DEFAULT.name());
             }
 
             Dojo.getInstance().getConfigHandler().saveConfig(Dojo.getInstance().getConfigHandler().getConfigFile("ranks"), this.ranksConfig);
@@ -128,6 +136,7 @@ public class RankService {
             this.ranksConfig.set("ranks." + rank.getName() + ".italic", rank.isItalic());
             this.ranksConfig.set("ranks." + rank.getName() + ".defaultRank", rank.isDefaultRank());
             this.ranksConfig.set("ranks." + rank.getName() + ".permissions", rank.getPermissions());
+            this.ranksConfig.set("ranks." + rank.getName() + ".category", rank.getRankCategory() != null ? rank.getRankCategory().name() : RankCategory.DEFAULT.name());
 
             Dojo.getInstance().getConfigHandler().saveConfig(Dojo.getInstance().getConfigHandler().getConfigFile("ranks"), this.ranksConfig);
         } else {
@@ -149,6 +158,7 @@ public class RankService {
         rankDocument.put("italic", rank.isItalic());
         rankDocument.put("defaultRank", rank.isDefaultRank());
         rankDocument.put("permissions", rank.getPermissions());
+        rankDocument.put("category", rank.getRankCategory() != null ? rank.getRankCategory().name() : RankCategory.DEFAULT.name());
         return rankDocument;
     }
 
@@ -167,6 +177,12 @@ public class RankService {
         rank.setItalic(document.getBoolean("italic"));
         rank.setDefaultRank(document.getBoolean("defaultRank"));
         rank.setPermissions((List<String>) document.get("permissions"));
+        String categoryString = document.getString("category");
+        if (categoryString != null) {
+            rank.setRankCategory(RankCategory.valueOf(categoryString));
+        } else {
+            rank.setRankCategory(RankCategory.DEFAULT);
+        }
         return rank;
     }
 
@@ -192,6 +208,7 @@ public class RankService {
             rank.setItalic(false);
             rank.setDefaultRank(true);
             rank.setPermissions(Arrays.asList("example.permission", "example.permission2"));
+            rank.setRankCategory(RankCategory.DEFAULT);
 
             this.ranks.add(rank);
         } else if (this.isFlatFile()) {
@@ -214,6 +231,7 @@ public class RankService {
             rank.setItalic(false);
             rank.setDefaultRank(true);
             rank.setPermissions(Arrays.asList("example.permission", "example.permission2"));
+            rank.setRankCategory(RankCategory.DEFAULT);
 
             this.ranks.add(rank);
         } else {

@@ -34,7 +34,7 @@ public class TrollCommand extends BaseCommand {
 
         String sub = args[0].toLowerCase();
         switch (sub) {
-            case "troll":
+            case "demo":
                 if (args.length < 2) {
                     sender.sendMessage(CC.translate("&cUsage: &e/troll troll <player>"));
                     return;
@@ -71,7 +71,7 @@ public class TrollCommand extends BaseCommand {
                         return;
                     }
                     Player player = (Player) sender;
-                    player.setVelocity(new Vector(0, 1, 0).multiply(15));
+                    player.setVelocity(new Vector(0, 1, 0).multiply(12));
                     player.sendMessage(CC.translate("&aYou've launched yourself into the air!"));
                     return;
                 }
@@ -80,7 +80,7 @@ public class TrollCommand extends BaseCommand {
                     sender.sendMessage(CC.translate("&cPlayer not found."));
                     return;
                 }
-                launchTarget.setVelocity(new Vector(0, 1, 0).multiply(15));
+                launchTarget.setVelocity(new Vector(0, 1, 0).multiply(12));
                 sender.sendMessage(CC.translate("&aYou've launched &e" + launchTarget.getDisplayName() + " &ainto the air!"));
                 launchTarget.sendMessage(CC.translate("&aYou have been launched into the air by &e" + sender.getName() + " &a!"));
                 break;

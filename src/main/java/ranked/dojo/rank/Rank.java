@@ -3,6 +3,7 @@ package ranked.dojo.rank;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
+import ranked.dojo.rank.enums.RankCategory;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class Rank {
     private boolean defaultRank;
 
     private List<String> permissions;
+
+    private RankCategory rankCategory;
 
     /**
      * Get color and name of the rank.

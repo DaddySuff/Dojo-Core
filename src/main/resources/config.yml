@@ -42,7 +42,7 @@ on-join:
     # {twitter}, {instagram}, {youtube}, {tiktok}, {facebook}, {github}, {server}, {region}.
     context:
       - "&7&m--------------------------------------"
-      - "&fWelcome to &6Artex Network, &f{color}{player}&f!"
+      - "&fWelcome to &6Ranked Dojo Network, &f{color}{player}&f!"
       - " "
       - " &aYour current Rank is &e{rank}&a."
       - "&7&m--------------------------------------"
@@ -53,14 +53,14 @@ broadcast:
   list:
     message-1:
       - " "
-      - "&7[&4&lArtex&7] &4&lDiscord"
+      - "&7[&4&lRanked Dojo&7] &4&lDiscord"
       - " &fJoin our discord to get informed"
       - " &fabout news & updates!"
       - " &c{discord}"
       - " "
     message-2:
       - " "
-      - "&7[&4&lArtex&7] &4&lSocial Media"
+      - "&7[&4&lRanked Dojo&7] &4&lSocial Media"
       - " &fWe now upload shorts on YouTube."
       - " &fCheck them out at"
       - " &c{youtube}&f."
@@ -68,21 +68,21 @@ broadcast:
       - " "
     message-3:
       - " "
-      - "&7[&4&lArtex&7] &4&lStore"
+      - "&7[&4&lRanked Dojo&7] &4&lStore"
       - " &fDon't forget to check our store"
       - " &ffor exclusive offers at"
       - " &c{store}&f."
       - " "
     message-4:
       - " "
-      - "&7[&4&lArtex&7] &4&lStore"
+      - "&7[&4&lRanked Dojo&7] &4&lStore"
       - " &fNew Tags available at"
       - " &c{store}&f."
       - " &fUse code &cTAGS50 &fto get 50% off!"
       - " "
     message-5:
       - " "
-      - "&7[&4&lArtex&7] &4&lStore"
+      - "&7[&4&lRanked Dojo&7] &4&lStore"
       - " &fWe're currently on a"
       - " &f50% sale on all ranks!"
       - " &fYour one-time opportunity"
