@@ -1,6 +1,6 @@
 name: Dojo
 version: '${project.version}'
-main: me.suff.dojo.Dojo
+main: ranked.dojo.Dojo
 authors:
   - Emmy
   - Suff

@@ -70,6 +70,10 @@
           <id>sonatype</id>
           <url>https://oss.sonatype.org/content/groups/public/</url>
       </repository>
+      <repository>
+          <id>jitpack.io</id>
+          <url>https://jitpack.io</url>
+      </repository>
   </repositories>
 
   <dependencies>
@@ -111,11 +115,19 @@
           <version>1.18.38</version>
       </dependency>
 
-      <!-- Reflections -->
+      <!-- CommandAPI -->
       <dependency>
-          <groupId>org.reflections</groupId>
-          <artifactId>reflections</artifactId>
-          <version>0.9.12</version>
+          <groupId>com.github.curxxed-mc</groupId>
+          <artifactId>CommandAPI</artifactId>
+          <version>1.0</version>
       </dependency>
+
+        <!-- Jetbrains Annotations -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>26.0.2</version>
+            <scope>provided</scope>
+        </dependency>
   </dependencies>
 </project>
