@@ -71,7 +71,7 @@ public class TrollCommand extends BaseCommand {
                         return;
                     }
                     Player player = (Player) sender;
-                    player.setVelocity(new Vector(0, 1, 0).multiply(12));
+                    player.setVelocity(new Vector(0, 1, 0).multiply(12)); // make sure to disable warnForExcessiveVelocity cause it'll dump a stack trace every time you launch yourself which is not good !
                     player.sendMessage(CC.translate("&aYou've launched yourself into the air!"));
                     return;
                 }
