@@ -28,11 +28,14 @@ public class Rank {
     private RankCategory rankCategory;
 
     /**
-     * Get color and name of the rank.
+     * Get color, style, and name of the rank.
      *
-     * @return the rank color and the rank name
+     * @return the rank color, style, and the rank name
      */
     public String getRankWithColor() {
-        return this.color + this.name;
+        String style = "";
+        if (this.bold) style += "§l";
+        if (this.italic) style += "§o";
+        return (this.color != null ? this.color : "") + style + this.name + "§r";
     }
 }

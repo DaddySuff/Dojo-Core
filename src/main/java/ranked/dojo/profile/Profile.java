@@ -2,16 +2,21 @@ package ranked.dojo.profile;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permissible;
 import ranked.dojo.Dojo;
 import ranked.dojo.grant.Grant;
 import ranked.dojo.locale.Locale;
+import ranked.dojo.permissible.DojoPermissible;
 import ranked.dojo.rank.Rank;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -96,6 +101,21 @@ public class Profile {
     }
 
     /**
+     * Get all permissions from the player's active grants' ranks.
+     *
+     * @return a set of permission strings
+     */
+    public Set<String> getAllRankPermissions() {
+        Set<String> permissions = new HashSet<>();
+        for (Grant grant : this.grants) {
+            if (grant.isActive() && grant.getRank() != null && grant.getRank().getPermissions() != null) {
+                permissions.addAll(grant.getRank().getPermissions());
+            }
+        }
+        return permissions;
+    }
+
+    /**
      * Add the default grant to the player.
      */
     private void addFirstDefaultGrant() {
@@ -116,7 +136,7 @@ public class Profile {
     }
 
     /**
-     * Determine the players rank and attach its perms.
+     * Determine the player's rank and attach its permissions using DojoPermissible.
      */
     public void determineRankAndAttachPerms() {
         if (!this.hasDefaultGrant()) {
@@ -125,8 +145,19 @@ public class Profile {
 
         Rank highestGrant = this.getHighestRankBasedOnGrant();
         this.setRank(highestGrant);
-        
-        List<Permission> permissions = this.getRankPermissionsBasedOnGrant();
-        permissions.forEach(permission -> Bukkit.getPlayer(this.uuid).addAttachment(Dojo.getInstance(), permission.getName(), true));
+
+        // Inject permissions into DojoPermissible
+        org.bukkit.entity.Player player = org.bukkit.Bukkit.getPlayer(this.uuid);
+        if (player != null && player.isOnline()) {
+            org.bukkit.permissions.Permissible permissible = player instanceof org.bukkit.permissions.Permissible ? (org.bukkit.permissions.Permissible) player : null;
+            if (permissible instanceof ranked.dojo.permissible.DojoPermissible) {
+                ranked.dojo.permissible.DojoPermissible dojoPermissible = (ranked.dojo.permissible.DojoPermissible) permissible;
+                dojoPermissible.clearRawPermissions();
+                for (String perm : this.getAllRankPermissions()) {
+                    dojoPermissible.addRawPermission(perm, true);
+                }
+                dojoPermissible.recalculatePermissions();
+            }
+        }
     }
 }

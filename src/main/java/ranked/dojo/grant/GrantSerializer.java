@@ -8,13 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Utility class for serializing and deserializing grants.
- *
- * @author Emmy
- * @project Artex
- * @date 28/08/2024 - 16:15
- */
 @UtilityClass
 public class GrantSerializer {
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();

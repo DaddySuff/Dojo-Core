@@ -93,13 +93,6 @@ public abstract class Menu {
         return (int) (Math.ceil((highest + 1) / 9D) * 9D);
     }
 
-    /**
-     * Adds a border to the inventory.
-     *
-     * @param buttons the buttons
-     * @param data    the data
-     * @param rows    the rows
-     */
     public void addBorder(Map<Integer, Button> buttons, byte data, int rows) {
         for (int i = 0; i < 9; i++) {
             buttons.putIfAbsent(i, Button.placeholder(Material.STAINED_GLASS_PANE, data, ""));
@@ -115,27 +108,15 @@ public abstract class Menu {
         }
     }
 
-    /**
-     * Addition by Emmy
-     * Adds a glass header to the paginated menu.
-     *
-     * @param buttons the button
-     */
     public void addGlassHeader(Map<Integer, Button> buttons, int durability) {
-        int maxSlot = getSize() - 1; // Ensure we don't exceed the menu size
-        for (int i = 1; i < 9 && i <= maxSlot; i++) { // Only add if slot exists
+        int maxSlot = getSize() - 1;
+        for (int i = 1; i < 9 && i <= maxSlot; i++) {
             if (i != 8) {
                 buttons.put(i, new PageGlassButton(durability));
             }
         }
     }
 
-    /**
-     * Addition by Emmy
-     * Refills glass to the empty slots of a menu.
-     *
-     * @param buttons the button
-     */
     public void addGlass(Map<Integer, Button> buttons, int durability) {
         for (int slot = 0; slot < getSize(); slot++) {
             if (!buttons.containsKey(slot)) {

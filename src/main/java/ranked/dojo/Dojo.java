@@ -77,6 +77,8 @@ public class Dojo extends JavaPlugin {
 
         // Initialize RankIntegration
         RankIntegration rankIntegration = new RankIntegration(this);
+        PunishmentHandler.loadPunishments();
+        PunishmentHandler.startExpirationTask(this);
 
         // Initialize and store NameColorMenu
         this.nameColorMenu = new NameColorMenu(this, rankIntegration);

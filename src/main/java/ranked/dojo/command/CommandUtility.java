@@ -19,6 +19,7 @@ import ranked.dojo.godmode.command.*;
 import ranked.dojo.grant.command.*;
 import ranked.dojo.instance.command.*;
 import ranked.dojo.namecolor.command.*;
+import ranked.dojo.punishment.command.PunishmentHistoryCommand;
 import ranked.dojo.rank.command.*;
 import ranked.dojo.spawn.command.*;
 import ranked.dojo.tag.command.*;
@@ -35,6 +36,7 @@ public class CommandUtility {
         new KickCommand();
         new WeatherCommand();
         new BanCommand();
+        new PunishmentHistoryCommand();
         if (Dojo.getInstance().getConfig().getBoolean("conversation.enabled")) {
             new MessageCommand();
             new ReplyCommand();

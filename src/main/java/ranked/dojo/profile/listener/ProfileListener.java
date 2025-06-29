@@ -1,6 +1,7 @@
 package ranked.dojo.profile.listener;
 
 import ranked.dojo.Dojo;
+import ranked.dojo.permissible.DojoPremissibleInjector;
 import ranked.dojo.profile.Profile;
 import ranked.dojo.util.PlayerUtil;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,7 +16,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 
 public class ProfileListener implements Listener {
-
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void permissible(PlayerLoginEvent e) {
+        Player p = e.getPlayer();
+        try {
+            DojoPremissibleInjector.initPlayer(p);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();

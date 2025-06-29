@@ -12,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import ranked.dojo.tag.Tag;
 
+import static ranked.dojo.punishment.PunishmentHandler.isBanned;
+
 
 @Getter
 public class ChatListener implements Listener {
@@ -21,31 +23,11 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = Dojo.getInstance().getProfileRepository().getProfile(player.getUniqueId());
 
-        String message = event.getMessage();
-
-        String prefixRaw = profile.getHighestRankBasedOnGrant().getPrefix();
-        String rankPrefix = prefixRaw != null && !prefixRaw.trim().isEmpty()
-                ? CC.translate(prefixRaw)
-                : "";
-
-        String suffixRaw = profile.getHighestRankBasedOnGrant().getSuffix();
-        String rankSuffix = suffixRaw != null && !suffixRaw.trim().isEmpty()
-                ? " " + CC.translate(suffixRaw)
-                : "";
-
-        ChatColor rankColor = profile.getHighestRankBasedOnGrant().getColor();
-        boolean translate = player.hasPermission("dojo.chat.color");
-        String colon = CC.translate("&f: &r");
-
-        Tag activeTag = Dojo.getInstance().getTagService().getActiveTag(player.getUniqueId());
-        String tag = activeTag == null ? "" : " " + CC.translate(activeTag.getNiceName());
-
-        // Use RankIntegration to get the correct name color (namecolor > rankcolor)
-        RankIntegration rankIntegration = new RankIntegration(Dojo.getInstance());
-        String nameColor = rankIntegration.getNameColor(player);
-        String chatName = nameColor + player.getName();
-        String format = (rankPrefix.isEmpty() ? "" : rankPrefix + " ") + chatName + rankSuffix + tag + colon + (translate ? CC.translate(message) : message);
-        event.setFormat(format);
+        if (isBanned(player.getUniqueId())) {
+            event.setCancelled(true);
+            player.sendMessage(CC.translate("&cYou cannot chat while banned! \n"));
+            return;
+        }
 
         if (Dojo.getInstance().getChatService().isChatMuted()) {
             if (player.hasPermission("dojo.bypass.mutechat")) {
@@ -55,5 +37,33 @@ public class ChatListener implements Listener {
             event.setCancelled(true);
             player.sendMessage(CC.translate("&cChat is currently muted."));
         }
+
+            String message = event.getMessage();
+
+            String prefixRaw = profile.getHighestRankBasedOnGrant().getPrefix();
+            String rankPrefix = prefixRaw != null && !prefixRaw.trim().isEmpty()
+                    ? CC.translate(prefixRaw)
+                    : "";
+
+            String suffixRaw = profile.getHighestRankBasedOnGrant().getSuffix();
+            String rankSuffix = suffixRaw != null && !suffixRaw.trim().isEmpty()
+                    ? " " + CC.translate(suffixRaw)
+                    : "";
+
+            ChatColor rankColor = profile.getHighestRankBasedOnGrant().getColor();
+            boolean translate = player.hasPermission("dojo.chat.color");
+            String colon = CC.translate("&f: &r");
+
+            Tag activeTag = Dojo.getInstance().getTagService().getActiveTag(player.getUniqueId());
+            String tag = activeTag == null ? "" : " " + CC.translate(activeTag.getNiceName());
+
+            // Use RankIntegration to get the correct name color (namecolor > rankcolor)
+            RankIntegration rankIntegration = new RankIntegration(Dojo.getInstance());
+            String nameColor = rankIntegration.getNameColor(player);
+            String chatName = nameColor + player.getName();
+            String format = (rankPrefix.isEmpty() ? "" : rankPrefix + " ") + chatName + rankSuffix + tag + colon + (translate ? CC.translate(message) : message);
+            event.setFormat(format);
+
+
+        }
     }
-}

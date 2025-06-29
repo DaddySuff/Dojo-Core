@@ -64,36 +64,9 @@ public class BanCommand extends BaseCommand {
         punishment.setAddedAt(System.currentTimeMillis());
         punishment.setExpiration(durationMillis == -1L ? -1L : System.currentTimeMillis() + durationMillis);
         punishment.setActive(true);
-        // Check if target has STAFF rank category
-        Profile targetProfile = Dojo.getInstance().getProfileRepository().getProfile(target.getUniqueId());
-        boolean isStaff = targetProfile.getHighestRankBasedOnGrant().getRankCategory() == RankCategory.STAFF;
-        if (isStaff && !isConfirm) {
-            commandArgs.getSender().sendMessage(CC.translate(CC.PREFIX + "&cYou are about to ban a STAFF member! To confirm, use: &e/ban confirm " + targetName + " " + durationArg + (reason.equals("No reason specified") ? "" : " " + reason) + (silent ? " -s" : "")));
-            return;
-        }
-        // If /ban confirm ... is used, shift args so targetName/durationArg/reason are correct
-        if (isConfirm) {
-            if (commandArgs.getArgs().length < 3) {
-                commandArgs.getSender().sendMessage(CC.translate(CC.PREFIX + "&cUsage: /ban confirm <player> <duration> [reason] [-s]"));
-                return;
-            }
-            targetName = commandArgs.getArgs()[1];
-            durationArg = commandArgs.getArgs()[2];
-            // Re-fetch the target after shifting args
-            target = Bukkit.getPlayerExact(targetName);
-            if (target == null) {
-                commandArgs.getSender().sendMessage(CC.translate(CC.PREFIX + "&cPlayer not found."));
-                return;
-            }
-            // Recalculate silent and reason after shifting
-            argsArray = commandArgs.getArgs();
-            silent = argsArray[argsArray.length - 1].equalsIgnoreCase("-s");
-            if (silent) {
-                reason = argsArray.length > 4 ? String.join(" ", Arrays.copyOfRange(argsArray, 3, argsArray.length - 1)) : "No reason specified";
-            } else {
-                reason = argsArray.length > 3 ? String.join(" ", Arrays.copyOfRange(argsArray, 3, argsArray.length)) : "No reason specified";
-            }
-        }
+        // Add the punishment to the handler (for history, reason, etc)
+        PunishmentHandler.addPunishment(target.getUniqueId(), punishment);
+        // Actually ban the player (for enforcement)
         PunishmentHandler.banPlayer(target.getUniqueId(), durationMillis);
         String banMsg = "\n&8&m--------------------------------------\n" +
                 "&c&lYou have been banned!" + "\n\n" +
@@ -113,6 +86,7 @@ public class BanCommand extends BaseCommand {
             }
         }
         // Get target's rank color for broadcast
+        Profile targetProfile = Dojo.getInstance().getProfileRepository().getProfile(target.getUniqueId());
         Rank targetRank = targetProfile != null ? targetProfile.getHighestRankBasedOnGrant() : null;
         String targetColor = (targetRank != null && targetRank.getColor() != null) ? targetRank.getColor().toString() : "";
         // Broadcast ban message (like KickCommand)
