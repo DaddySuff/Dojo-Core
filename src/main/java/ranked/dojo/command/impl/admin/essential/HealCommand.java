@@ -16,7 +16,7 @@ public class HealCommand extends BaseCommand {
 
         if (args.length < 1) {
             player.setHealth(20.0);
-            player.setFoodLevel(20);
+            player.setFoodLevel(40);
             player.setFireTicks(0);
             player.sendMessage(CC.translate("&eYou have been healed."));
             return;
@@ -29,7 +29,7 @@ public class HealCommand extends BaseCommand {
         }
 
         targetPlayer.setHealth(20.0);
-        targetPlayer.setFoodLevel(20);
+        targetPlayer.setFoodLevel(40);
         targetPlayer.setFireTicks(0);
         player.sendMessage(CC.translate("&eYou have healed &6" + targetPlayer.getName() + "&e."));
         targetPlayer.sendMessage(CC.translate("&eYou have been healed by " + player.getName() + "."));

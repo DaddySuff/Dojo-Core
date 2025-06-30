@@ -3,7 +3,10 @@ package ranked.dojo.profile.listener;
 import ranked.dojo.Dojo;
 import ranked.dojo.permissible.DojoPremissibleInjector;
 import ranked.dojo.profile.Profile;
+import ranked.dojo.rank.enums.RankCategory;
+import ranked.dojo.util.CC;
 import ranked.dojo.util.PlayerUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,6 +49,8 @@ public class ProfileListener implements Listener {
 
         profile.determineRankAndAttachPerms();
 
+
+
         FileConfiguration config = Dojo.getInstance().getConfig();
         if (config.getBoolean("on-join.tp-to-spawn")) {
             Dojo.getInstance().getSpawnHandler().teleportToSpawn(player);
@@ -58,6 +63,19 @@ public class ProfileListener implements Listener {
         }
 
         PlayerUtil.sendWelcomeMessage(player, profile, config);
+
+        // Staff join notification
+        if (profile.getHighestRankBasedOnGrant().getRankCategory() == RankCategory.STAFF || player.isOp()) {
+            String staffJoinMsg = CC.translate("&7(Staff) "
+                    + profile.getHighestRankBasedOnGrant().getColor() // get rank color
+                    + player.getName() + " &ahas &bconnected &ato the server!");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                Profile targetProfile = Dojo.getInstance().getProfileRepository().getProfile(p.getUniqueId());
+                if (targetProfile != null && targetProfile.getHighestRankBasedOnGrant().getRankCategory() == RankCategory.STAFF || p.isOp()) {
+                    p.sendMessage(staffJoinMsg);
+                }
+            }
+        }
     }
 
     @EventHandler
@@ -67,6 +85,18 @@ public class ProfileListener implements Listener {
         profile.save();
 
         event.setQuitMessage(null);
+
+        if (profile.getHighestRankBasedOnGrant().getRankCategory() == RankCategory.STAFF || player.isOp()) {
+            String staffQuitMsg = CC.translate("&7(Staff) "
+                    + profile.getHighestRankBasedOnGrant().getColor() // get rank color
+                    + player.getName() + " &ahas &cleft &athe server!");
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                Profile targetProfile = Dojo.getInstance().getProfileRepository().getProfile(p.getUniqueId());
+                if (targetProfile != null && targetProfile.getHighestRankBasedOnGrant().getRankCategory() == RankCategory.STAFF || p.isOp()) {
+                    p.sendMessage(staffQuitMsg);
+                }
+            }
+        }
     }
 
     @EventHandler

@@ -131,6 +131,8 @@ public class PunishmentMenu extends PaginatedMenu {
             if (punishment.getPunishmentType() == EnumPunishmentType.BAN) {
                 PunishmentHandler.unbanPlayer(target.getUniqueId());
             }
+            // Save changes to disk
+            PunishmentHandler.updatePunishments(target.getUniqueId());
             // TODO: Add similar logic for other types if needed (e.g., unmute)
             player.sendMessage(CC.translate("&aYou have successfully removed the punishment for " + target.getName() + "."));
             new PunishmentMenu(target, showActive, filterType).openMenu(player);

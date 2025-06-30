@@ -34,9 +34,18 @@ public class RankIntegration {
                 format.append(" ");
             }
 
-            // 2. Name with color (namecolor > rankcolor)
-            format.append(getNameColor(player));
-            format.append(player.getName());
+            // 2. Name with color (namecolor > rankcolor), always apply bold/italic from rank
+            ChatColor customColor = getSavedNameColor(player.getUniqueId());
+            if (rank != null) {
+                String styledName = rank.getRankWithColor(player.getName());
+                if (customColor != null) {
+                    // Replace the color code at the start with the custom color, keep bold/italic
+                    styledName = customColor + styledName.replaceFirst("^[^a-zA-Z0-9]", "");
+                }
+                format.append(styledName);
+            } else {
+                format.append(player.getName());
+            }
             format.append(ChatColor.RESET);
 
             // 3. Tag
@@ -57,9 +66,18 @@ public class RankIntegration {
 
     public String getTablistFormat(Player player) {
         try {
-            // Only use rank color for tablist
-            ChatColor color = getNameColor(player, true);
-            return color + player.getName();
+            Profile profile = plugin.getProfileRepository().getProfile(player.getUniqueId());
+            if (profile == null) return player.getName();
+            Rank rank = profile.getHighestRankBasedOnGrant();
+            ChatColor customColor = getSavedNameColor(player.getUniqueId());
+            if (rank != null) {
+                String styledName = rank.getRankWithColor(player.getName());
+                if (customColor != null) {
+                    styledName = customColor + styledName.replaceFirst("^[^a-zA-Z0-9]", "");
+                }
+                return styledName;
+            }
+            return player.getName();
         } catch (Exception e) {
             plugin.getLogger().warning("Error formatting tablist name for " + player.getName() + ": " + e.getMessage());
             return player.getName();

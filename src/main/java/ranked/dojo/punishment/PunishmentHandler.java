@@ -6,8 +6,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.entity.Player;
 import ranked.dojo.Dojo;
+import ranked.dojo.profile.Profile;
+import ranked.dojo.rank.enums.RankCategory;
 import ranked.dojo.util.CC;
 import java.util.HashMap;
 import java.util.List;
@@ -219,6 +222,31 @@ public class PunishmentHandler implements Listener {
         if (isBanned(player.getUniqueId())) {
             event.setCancelled(true);
             player.sendMessage(CC.translate("&c&lYou cannot execute commands while banned!\n"));
+
+            String alert = CC.translate("&c[BAN ALERT] &f" + player.getName() + " tried to execute a command while banned: &e" + event.getMessage());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                Profile profile = Dojo.getInstance().getProfileRepository().getProfile(p.getUniqueId());
+                boolean isStaff = (profile != null && profile.getHighestRankBasedOnGrant().getRankCategory() == RankCategory.STAFF) || p.isOp();
+                if (isStaff) {
+                    p.sendMessage(alert);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        if (isBanned(player.getUniqueId())) {
+            event.setCancelled(true);
+            String alert = CC.translate("&c[BAN ALERT] &f" + player.getName() + " tried to chat while banned: &e" + event.getMessage());
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                Profile profile = Dojo.getInstance().getProfileRepository().getProfile(p.getUniqueId());
+                boolean isStaff = (profile != null && profile.getHighestRankBasedOnGrant().getRankCategory() == RankCategory.STAFF) || p.isOp();
+                if (isStaff) {
+                    p.sendMessage(alert);
+                }
+            }
         }
     }
 
